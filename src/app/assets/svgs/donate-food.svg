@@ -1,0 +1,13 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 64 64"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="w-16 h-16 text-primary group-hover:text-white"
+>
+  <path d="M32 4a16 16 0 0 1 16 16c0 8.284-8 12-16 20-8-8-16-11.716-16-20A16 16 0 0 1 32 4z" />
+  <path d="M4 50h56M12 58h40" />
+</svg>
