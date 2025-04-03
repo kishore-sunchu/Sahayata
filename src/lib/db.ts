@@ -1,27 +1,33 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import mongoose from "mongoose";
+import mongoose, { Connection } from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI as string;
+const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
   throw new Error("Please define the MONGODB_URI environment variable");
 }
 
-const cached = (global as any).mongoose || { conn: null, promise: null };
+interface MongooseCache {
+  conn: Connection | null;
+  promise: Promise<Connection> | null;
+}
 
-export async function connectToDatabase() {
+const globalCache: { mongoose?: MongooseCache } = global as any;
+const cached: MongooseCache = globalCache.mongoose || { conn: null, promise: null };
+
+globalCache.mongoose = cached;
+
+export async function connectToDatabase(): Promise<Connection> {
   if (cached.conn) {
     return cached.conn;
   }
 
   if (!cached.promise) {
     cached.promise = mongoose
-      .connect(MONGODB_URI, {
+      .connect(MONGODB_URI as string, {
         dbName: "sahayata",
-        // useNewUrlParser: true,
-        useUnifiedTopology: true,
-      } as any)
-      .then((mongoose) => mongoose);
+      })
+      .then((mongooseInstance) => mongooseInstance.connection);
   }
 
   cached.conn = await cached.promise;
